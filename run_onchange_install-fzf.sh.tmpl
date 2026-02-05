@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ---
+# fzf Installation
+# ---
+#
+# This script is managed by chezmoi as a `run_onchange_` script.
+# It runs the fzf installer script, which is expected to be available
+# from a git repository cloned by chezmoi into `~/.local/share/src/fzf`.
+#
+# The script's execution is triggered by `chezmoi` when the HEAD commit
+# of the local fzf git repository changes.
+#
+# ---
+
+{{- $fzf_repo_path := joinPath .chezmoi.homeDir ".local/share/src/fzf" -}}
+{{- $latest_commit := "" -}}
+{{- if stat $fzf_repo_path -}}
+{{-   $latest_commit = output "git" "-C" $fzf_repo_path "rev-parse" "--short" "HEAD" -}}
+{{- end -}}
+
+#
+# chezmoi template: Managed by chezmoi
+# fzf commit: {{ $latest_commit }}
+#
+# ---
+
+# Function to log messages
+log() {
+    echo "› $1"
+}
+
+FZF_SRC_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/src/fzf"
+
+if [ -f "$FZF_SRC_DIR/install" ]; then
+  log "Installing/updating fzf..."
+  # The install script handles its own update logic.
+  # We run it with --all to ensure binaries and shell extensions are installed.
+  # --xdg ensures it respects XDG base directory specification.
+  # --no-update-rc prevents it from modifying shell rc files, as they
+  # are managed by chezmoi.
+  "$FZF_SRC_DIR/install" --all --xdg --no-update-rc
+  log "fzf installed/updated successfully."
+else
+  log "Skipping: fzf install script not found at $FZF_SRC_DIR/install."
+fi

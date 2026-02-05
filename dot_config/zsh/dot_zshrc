@@ -1,0 +1,142 @@
+
+# Install zsh-autosuggestions
+#    ```sh
+#    mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+#    git clone https://github.com/zsh-users/zsh-autosuggestions "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins/zsh-autosuggestions"
+#    ```
+
+# Enable zsh-autosuggestions
+source "${ZSH_DATA_HOME}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+
+# Install zsh-completions
+#    ```sh
+#    mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+#    git clone https://github.com/zsh-users/zsh-completions "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins/zsh-completions"
+#    ```
+
+# Include the directory in your $fpath
+fpath=(${ZSH_DATA_HOME}/plugins/zsh-completions/src $fpath)
+
+# Enable auto completion
+autoload -Uz compinit
+compinit -d "${ZSH_CACHE_HOME}/zcompdump-${ZSH_VERSION}"
+
+# Completion styles
+zstyle ':completion:*' format '%B%F{blue}%d%f%b'
+zstyle ':completion:*' group-name ''
+
+# Menu selection
+zstyle ':completion:*:default' menu select=2
+
+# Color settings
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# Case insensitive completion
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' '+m:{A-Z}={a-z}'
+
+# Keep prefix when completing
+zstyle ':completion:*' keep-prefix
+zstyle ':completion:*' recent-dirs-insert both
+
+# Cashe settings
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "${ZSH_CACHE_HOME}/zcompcache"
+
+# Sudo completion
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+
+
+# Install pure
+#    ```sh
+#    mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/themes"
+#    git clone https://github.com/sindresorhus/pure.git "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/themes/pure"
+#    ```
+
+# pure Theme
+fpath+="${ZSH_DATA_HOME}/themes/pure"
+
+# Initialize the prompt system and choose "pure"
+autoload -U promptinit; promptinit
+prompt pure
+RPROMPT='%{$fg[gray]%} %D{%Y/%m/%d} %* %{$reset_color%}'
+
+
+# Aliases
+if [[ -x `which colordiff` ]]; then
+    alias diff='colordiff -u'
+else
+    alias diff='diff -u'
+fi
+# ls aliases
+if [[ -x `which eza` ]]; then
+    alias eza='\eza -F --color=auto --color-scale --hyperlink --icons'
+    alias ezaa='eza -a'
+    alias ezat='eza -T'
+    alias ezata='eza -aT'
+    alias ezal='eza -l --git --git-repos --time-style=long-iso'
+    alias ezala='elal -a'
+    alias ezalt='ezal -T'
+    alias ezalta='ezal -aT'
+    alias ls='eza'
+    alias la='eza -a'
+    alias lt='eza -T'
+    alias lta='eza -aT'
+    alias ll='ezal'
+    alias lla='ezal -a'
+    alias llt='ezal -T'
+    alias llta='ezal -aT'
+else
+    if [[ "${OSTYPE}" = "darwin"* ]]; then
+        alias ls='ls -FGT'
+    elif [ "${OSTYPE}" = "linux-gnu" ]; then
+        alias ls='ls -F --color=auto'
+    else
+        alias ls='ls -F --color=auto'
+    fi
+    alias la='ls -a'
+    alias ll='ls -l'
+    alias lla='ls -al'
+    export LSCOLORS=gxfxcxdxbxegedabagacad
+fi
+
+# history
+HISTFILE="${ZSH_STATE_HOME}/history"	# The path to the history file.
+HISTORY_IGNORE="(pwd|l[sal]|history)"
+export HISTSIZE=1000
+export SAVEHIST=100000
+function history-all { history -i 1 }
+
+setopt extended_history     # Enable extended history with timestamps
+setopt hist_ignore_dups     # Do not record duplicate commands
+setopt hist_ignore_space    # Remove command lines starting with space from history list
+setopt hist_verify          # Allow editing once between recalling history and executing
+setopt hist_reduce_blanks   # Remove extra whitespace and record
+setopt hist_no_store        # Do not register the history command in history
+setopt share_history        # Share history between sessions
+setopt auto_pushd           # Show previously visited directory with cd -
+
+
+# less settings
+export LESS='-R'
+export LESSHISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}"/less/history
+[ ! -d "$(dirname "$LESSHISTFILE")" ] && mkdir -p "$(dirname "$LESSHISTFILE")"
+
+# Node.js settings
+export NODE_REPL_HISTORY="${XDG_DATA_HOME:-$HOME/.local/share}"/node_repl/history
+[ ! -d "$(dirname "$NODE_REPL_HISTORY")" ] && mkdir -p "$(dirname "$NODE_REPL_HISTORY")"
+
+# Node version manager
+if [[ -x `which mise` ]]; then
+    # Polyglot runtime manager (mise)
+    eval "$(mise activate zsh)"
+else
+    if [[ -x `which fnm` ]]; then
+        # Node Version Manager (fnm)
+        eval "$(fnm env --use-on-cd)"
+    fi
+fi
+
+# fzf shell integration
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+

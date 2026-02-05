@@ -1,0 +1,26 @@
+{{- if eq .chezmoi.os "windows" }}
+{{- else }}
+[".local/share/zsh/themes/pure"]
+    type = "git-repo"
+    url = "https://github.com/sindresorhus/pure"
+    refreshPeriod = "168h"
+    clone.args = ["--depth", "1"]
+
+[".local/share/zsh/plugins/zsh-autosuggestions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-autosuggestions"
+    refreshPeriod = "168h"
+    clone.args = ["--depth", "1"]
+
+[".local/share/zsh/plugins/zsh-completions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-completions"
+    refreshPeriod = "168h"
+    clone.args = ["--depth", "1"]
+
+[".local/share/src/fzf"]
+    type = "git-repo"
+    url = "https://github.com/junegunn/fzf.git"
+    refreshPeriod = "168h"
+    clone.args = ["--depth", "1"]
+{{- end }}

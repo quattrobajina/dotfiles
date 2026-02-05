@@ -1,0 +1,148 @@
+# locale settings
+if (locale -a | grep -iq "ja_JP.UTF"); then
+    export LANG=`locale -a | grep -i "ja_JP.UTF"`
+    export LC_CTYPE=$LANG
+fi
+
+
+# XDG Base Directory Specification
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# zsh specific directories
+export ZSH_CONFIG_HOME="${XDG_CONFIG_HOME}/zsh"
+export ZSH_CACHE_HOME="${XDG_CACHE_HOME}/zsh"
+export ZSH_DATA_HOME="${XDG_DATA_HOME}/zsh"
+export ZSH_STATE_HOME="${XDG_STATE_HOME}/zsh"
+export ZDOTDIR="${ZSH_CONFIG_HOME}"
+
+local -a dirs_to_create
+dirs_to_create=(
+    "$ZSH_CONFIG_HOME"
+    "$ZSH_CACHE_HOME"
+    "$ZSH_DATA_HOME"
+    "$ZSH_STATE_HOME"
+)
+
+for dir in "${dirs_to_create[@]}"; do
+    mkdir -p "$dir"
+done
+unset dirs_to_create
+
+# path settings
+local -a path_dirs
+path_dirs=(
+    "$HOME/.local/bin"
+    "$HOME/.gem/ruby/2.6.0/bin"
+    "/Volumes/C/bin"
+    "$HOME/bin"
+    "$HOME/local/bin"
+)
+
+for dir in "${path_dirs[@]}"; do
+    if [[ -d "$dir" ]] && [[ ":$PATH:" != *":$dir:"* ]]; then
+        export PATH="$dir:$PATH"
+    fi
+done
+unset path_dirs
+
+# proxy settings
+function load_proxy_settings () {
+    help () {
+        echo 'usage: load_proxy_settings [-h] [--help] [-v] [--verbose]'
+    }
+    verbose=0
+    for opt in $*
+    do
+        case $opt in
+            -h|--help)
+                help
+                return
+                ;;
+            -v|--verbose)
+                verbose=1
+                ;;
+        esac
+    done
+    unset PROXY_URL
+    unset NO_PROXY_URLS
+    [ -f ~/.proxy ] && source ~/.proxy
+    [ ${verbose} -gt 0 ] && echo -e "load_proxy_settings : PROXY_URL=${PROXY_URL}\nload_proxy_settings : NO_PROXY_URLS=${NO_PROXY_URLS}"
+}
+
+function update_proxy_settings () {
+    help () {
+        echo 'usage: update_proxy_settings [-h] [--help] [-v] [--verbose]'
+    }
+    set_proxies () {
+        export http_proxy=$PROXY_URL
+        export https_proxy=$PROXY_URL
+        export ftp_proxy=$PROXY_URL
+        export HTTP_PROXY=$PROXY_URL
+        export HTTPS_PROXY=$PROXY_URL
+        export FTP_PROXY=$PROXY_URL
+        if [ -n "$NO_PROXY_URLS" ] ; then
+            export no_proxy="$NO_PROXY_URLS"
+            export NO_PROXY="$NO_PROXY_URLS"
+        else
+            unset no_proxy
+            unset NO_PROXY
+        fi
+    }
+    unset_proxies () {
+        unset http_proxy
+        unset https_proxy
+        unset ftp_proxy
+        unset HTTP_PROXY
+        unset HTTPS_PROXY
+        unset FTP_PROXY
+        unset no_proxy
+        unset NO_PROXY
+    }
+
+    verbose=0
+    lps_opts=""
+    for opt in $*
+    do
+        case $opt in
+            -h|--help)
+                help
+                return
+                ;;
+            -v|--verbose)
+                verbose=1
+                ;;
+            -vv)
+                verbose=2
+                lps_opts="-v"
+                ;;
+        esac
+    done
+
+    load_proxy_settings ${lps_opts}
+    [ ${verbose} -gt 0 ] && echo -e "update_proxy_settings : proxy setting has loaded."
+
+    if [ -n "$PROXY_URL" ] ; then
+        [ ${verbose} -gt 0 ] && echo -e "update_proxy_settings : check whether the proxy server is accessible."
+        host="${${PROXY_URL[(ws,://,)2]}[(ws,:,)1]}"
+        if [[ "${OSTYPE}" = "darwin"* ]]; then
+            ping -o ${host} > /dev/null 2>&1
+        else
+            ping -c 1 ${host} > /dev/null 2>&1
+        fi
+        if [ $? -eq 0 ]; then
+            [ ${verbose} -gt 0 ] && echo "update_proxy_settings : proxy server is accessible. set proxy settnigs."
+            set_proxies
+        else
+            [ ${verbose} -gt 0 ] && echo "update_proxy_settings : cannot access to proxy server. unset proxy settnigs."
+            unset_proxies
+        fi
+    else
+        [ ${verbose} -gt 0 ] && echo "update_proxy_settings : unset proxy settnigs."
+        unset_proxies
+    fi
+}
+
+update_proxy_settings

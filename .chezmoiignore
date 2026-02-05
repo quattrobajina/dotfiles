@@ -1,0 +1,12 @@
+README.md
+LICENSE
+{{- if eq .chezmoi.os "windows" }}
+.config/tmux
+.config/zsh
+.zsh*
+*.sh
+{{- else if eq .chezmoi.os "darwin" }}
+.bash_*
+.profile
+{{- else if eq .chezmoi.os "linux" }}
+{{- end }}

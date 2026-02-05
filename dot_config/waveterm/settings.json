@@ -1,0 +1,11 @@
+{
+  "ai:*": false,
+  "autoupdate:channel": "latest",
+  "telemetry:enabled": false,
+  "term:fontfamily": "UDEV Gothic JPDOCNFLG, UDEV Gothic NFLG, UDEV Gothic JPDOCNF, UDEV Gothic NF, UDEV Gothic JPDOCLG, UDEV Gothic LG, UDEV Gothic JPDOC, UDEV Gothic",
+  "term:fontsize": 14,
+  "term:scrollback": 100000,
+  "term:transparency": 0.8,
+  "window:blur": true,
+  "window:opacity": 0
+}
