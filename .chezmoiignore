@@ -6,7 +6,9 @@ LICENSE
 .zsh*
 *.sh
 {{- else if eq .chezmoi.os "darwin" }}
+Documents
 .bash_*
 .profile
 {{- else if eq .chezmoi.os "linux" }}
+Documents
 {{- end }}
