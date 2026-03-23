@@ -140,3 +140,8 @@ fi
 # fzf shell integration
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
+# zoxide (smarter cd command)
+if [[ -x `which zoxide` ]]; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
+

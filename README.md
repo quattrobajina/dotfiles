@@ -6,7 +6,7 @@ These are my personal dotfiles, managed by [chezmoi](https://www.chezmoi.io/).
 
 This repository contains cross-platform configurations for my personal development environment:
 
-- **Shell (zsh):** Pure prompt, `zsh-autosuggestions`, `zsh-completions`, history, aliases, and `fzf` integration (Linux/macOS).
+- **Shell (zsh):** Pure prompt, `zsh-autosuggestions`, `zsh-completions`, history, aliases, `fzf`, and `zoxide` integration (Linux/macOS).
 - **Shell (bash):** Alternative shell configuration with templates for cross-platform compatibility.
 - **Shell (PowerShell):** PowerShell Core (7+) configuration with `posh-git`, `PSReadLine`, `oh-my-posh`, and `zoxide` integration (Windows).
 - **Editor (Neovim):** Lua-based configuration following the AstroNvim template.
