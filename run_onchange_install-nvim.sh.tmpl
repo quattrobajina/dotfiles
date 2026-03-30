@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# --- 
+# ---
 # Neovim Installation
-# --- 
+# ---
 #
 # This script is managed by chezmoi as a `run_onchange_` script.
 # It automates the download and installation of the Neovim AppImage for Linux.
@@ -14,7 +14,7 @@ set -euo pipefail
 # `chezmoi` will only re-run this script if the version number changes, thus
 # avoiding redundant downloads.
 #
-# --- 
+# ---
 
 # Function to log messages
 log() {
@@ -43,13 +43,13 @@ mkdir -p "$(dirname "$NVIM_INSTALL_PATH")"
 # Determine architecture
 ARCH_RAW=$(uname -m)
 case "$ARCH_RAW" in
-    x86_64) 
+    x86_64)
         ARCH="x86_64"
         ;;
-    aarch64 | arm64) 
+    aarch64 | arm64)
         ARCH="arm64"
         ;;
-    *) 
+    *)
         log "Error: Unsupported architecture for Neovim AppImage: $ARCH_RAW." >&2
         exit 1
         ;;

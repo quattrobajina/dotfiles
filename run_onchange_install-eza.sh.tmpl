@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# --- 
+# ---
 # eza Installation
-# --- 
+# ---
 #
 # This script is managed by chezmoi as a `run_onchange_` script.
 # It automates the download and installation of eza for Linux.
@@ -14,7 +14,7 @@ set -euo pipefail
 # `chezmoi` will only re-run this script if the version number changes, thus
 # avoiding redundant downloads.
 #
-# --- 
+# ---
 
 {{ if eq .chezmoi.os "linux" -}}
 {{- $api_url := "https://api.github.com/repos/eza-community/eza/releases/latest" -}}
@@ -52,7 +52,7 @@ OS=$(uname -s)
 ARCH=$(uname -m)
 
 case "$OS" in
-  Linux) 
+  Linux)
     OS_TARGET="unknown-linux-gnu"
     ;;
   *)
@@ -64,10 +64,10 @@ case "$OS" in
 esac
 
 case "$ARCH" in
-  x86_64) 
+  x86_64)
     ARCH_TARGET="x86_64"
     ;;
-  aarch64 | arm64) 
+  aarch64 | arm64)
     ARCH_TARGET="aarch64"
     ;;
   *)

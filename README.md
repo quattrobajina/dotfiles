@@ -67,3 +67,18 @@ After applying, your shell, editor, and tools will be configured as defined in t
 - **Linux:** Full Unix tooling with zsh, tmux, and all shell scripts.
 
 The `.chezmoiignore` file automatically manages these exclusions based on your operating system.
+
+## Development
+
+If you plan to customize or modify these configurations for your own use, these tools help maintain code consistency and quality. These are **not required** for normal usage.
+
+### Pre-commit Hooks
+This repository uses [pre-commit](https://pre-commit.com/) to automate checks:
+1. **Install**: `brew install pre-commit` (macOS) or `pip install pre-commit` (Windows/Linux).
+2. **Enable**: Run `pre-commit install` in the source directory.
+
+### Quality Tools
+The following tools are used during the pre-commit phase:
+- **StyLua**: Automatic Lua formatting for Neovim configs.
+- **ShellCheck**: Static analysis for shell scripts.
+- **Gitleaks**: Prevents accidental commits of secrets.

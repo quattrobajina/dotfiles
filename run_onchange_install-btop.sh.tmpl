@@ -50,13 +50,13 @@ log "Installing/updating btop..."
 # Determine architecture
 ARCH=$(uname -m)
 case "$ARCH" in
-  x86_64) 
+  x86_64)
     ARCH_TARGET="x86_64"
     ;;
-  aarch64 | arm64) 
+  aarch64 | arm64)
     ARCH_TARGET="aarch64"
     ;;
-  *) 
+  *)
     log "Error: Unsupported architecture for btop binary download: $ARCH."
     exit 1
     ;;
