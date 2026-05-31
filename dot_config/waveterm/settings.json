@@ -2,6 +2,7 @@
   "ai:*": false,
   "app:hideaibutton": true,
   "autoupdate:channel": "latest",
+  "tab:background": "bg@default-modified",
   "telemetry:enabled": false,
   "term:fontfamily": "UDEV Gothic JPDOCNFLG, UDEV Gothic NFLG, UDEV Gothic JPDOCNF, UDEV Gothic NF, UDEV Gothic JPDOCLG, UDEV Gothic LG, UDEV Gothic JPDOC, UDEV Gothic",
   "term:fontsize": 14,
