@@ -59,7 +59,12 @@ fpath+="${ZSH_DATA_HOME}/themes/pure"
 # Initialize the prompt system and choose "pure"
 autoload -U promptinit; promptinit
 prompt pure
-RPROMPT='%{$fg[gray]%} %D{%Y/%m/%d} %* %{$reset_color%}'
+
+# Show datetime on the left (above pure's prompt)
+_prompt_datetime_precmd() {
+    print -P "%F{gray}%D{%Y/%m/%d} %*%f"
+}
+add-zsh-hook precmd _prompt_datetime_precmd
 
 
 # Aliases
